@@ -1,0 +1,36 @@
+-- Step 1: Create main Library table
+CREATE TABLE lib1 (
+  rollno NUMBER(10),
+  name VARCHAR2(20),
+  bookname VARCHAR2(30)
+);
+
+-- Step 2: Create Audit table
+CREATE TABLE lib_audit (
+  rollno NUMBER(10),
+  name VARCHAR2(20),
+  bookname VARCHAR2(30)
+);
+
+-- Step 3: Insert sample data
+INSERT INTO lib1 VALUES (1, 'Amit', 'DBMS');
+INSERT INTO lib1 VALUES (2, 'Sneha', 'OS');
+INSERT INTO lib1 VALUES (3, 'Rahul', 'CN');
+COMMIT;
+
+-- Step 4: Create Trigger
+CREATE OR REPLACE TRIGGER lib_trig
+AFTER UPDATE OR DELETE ON lib1
+FOR EACH ROW
+BEGIN
+  INSERT INTO lib_audit VALUES(:OLD.rollno, :OLD.name, :OLD.bookname);
+END;
+/
+
+-- Step 5: Test Trigger by updating and deleting records
+UPDATE lib1 SET bookname = 'Advanced DBMS' WHERE rollno = 1;
+DELETE FROM lib1 WHERE rollno = 2;
+
+-- Step 6: Display Results
+SELECT * FROM lib1;
+SELECT * FROM lib_audit;

@@ -1,0 +1,46 @@
+// IMPLEMENTATION OF INDEXING IN MONGODB
+
+// CREATE COLLECTION
+db.createCollection("student");
+
+// INSERT RECORDS
+db.student.insert({Rollno:1, name:'nikita', subject:'DMSA', marks:78});
+db.student.insert({Rollno:2, name:'kiran', subject:'OSD', marks:75});
+db.student.insert({Rollno:3, name:'komal', subject:'TOC', marks:69});
+db.student.insert({Rollno:4, name:'snehal', subject:'TOC', marks:81});
+db.student.insert({Rollno:5, name:'saurabh', subject:'TOC', marks:78});
+
+// DISPLAY RECORDS
+db.student.find();
+db.student.find().pretty();
+
+// CREATE INDEX
+db.student.ensureIndex({Rollno:1});
+
+// DISPLAY ALL INDEXES
+db.student.getIndexes();
+
+// USING MIN INDEX
+db.student.find().min({Rollno:4});
+
+// USING MAX INDEX
+db.student.find().max({Rollno:2});
+
+// SORT ASCENDING
+db.student.find().sort({Rollno:1}).pretty();
+
+// SORT DESCENDING
+db.student.find().sort({Rollno:-1}).pretty();
+
+// CREATE DESCENDING INDEX
+db.student.ensureIndex({Rollno:-1});
+
+// GET INDEX STATISTICS
+db.student.stats();
+
+// EXPLAIN QUERY
+db.student.find().explain();
+
+// DROP INDEX
+db.student.dropIndex({Rollno:1});
+

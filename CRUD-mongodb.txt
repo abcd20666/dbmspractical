@@ -1,0 +1,63 @@
+
+// 1) CREATE / SWITCH DATABASE
+use OnlineShoppingDB
+
+// 2) CREATE + INSERT DOCUMENTS
+
+// (a) Customers Collection
+db.Customers.insertMany([
+  { CustomerID: 1, Name: "Amit Sharma", City: "Pune", Email: "amit@gmail.com" },
+  { CustomerID: 2, Name: "Sneha Patil", City: "Mumbai", Email: "sneha@gmail.com" },
+  { CustomerID: 3, Name: "Rahul Deshmukh", City: "Nashik", Email: "rahul@gmail.com" }
+])
+
+// (b) Products Collection
+db.Products.insertMany([
+  { ProductID: 101, Name: "Laptop", Price: 55000, Brand: "HP", Stock: 10 },
+  { ProductID: 102, Name: "Mobile", Price: 20000, Brand: "Samsung", Stock: 15 },
+  { ProductID: 103, Name: "Headphones", Price: 1500, Brand: "Boat", Stock: 25 }
+])
+
+// (c) Orders Collection
+db.Orders.insertMany([
+  { OrderID: 501, CustomerID: 1, ProductID: 101, Quantity: 1, Total: 55000 },
+  { OrderID: 502, CustomerID: 2, ProductID: 103, Quantity: 2, Total: 3000 }
+])
+
+// 3) READ DOCUMENTS
+
+// (a) Display all customers
+db.Customers.find()
+
+// (b) Display products with price > 5000
+db.Products.find({ Price: { $gt: 5000 } })
+
+// (c) Display customers from Pune or Mumbai
+db.Customers.find({ $or: [ { City: "Pune" }, { City: "Mumbai" } ] })
+
+// 4) UPDATE DOCUMENTS
+
+// (a) Update product price
+db.Products.updateOne(
+  { ProductID: 103 },
+  { $set: { Price: 1800 } }
+)
+
+// (b) Increase stock of Mobile by 5
+db.Products.updateOne(
+  { Name: "Mobile" },
+  { $inc: { Stock: 5 } }
+)
+
+// 5) DELETE DOCUMENTS
+
+// (a) Delete a customer
+db.Customers.deleteOne({ CustomerID: 3 })
+
+// (b) Delete products with price < 2000
+db.Products.deleteMany({ Price: { $lt: 2000 } })
+
+// 6) SAVE METHOD
+var prod = { ProductID: 104, Name: "Smart Watch", Price: 4500, Brand: "Noise", Stock: 12 }
+db.Products.save(prod)
+

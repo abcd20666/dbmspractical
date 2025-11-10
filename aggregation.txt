@@ -1,0 +1,78 @@
+MongoDB Practical – Aggregation & Indexing
+// ✅ 1) Create Student Collection (Aggregation Example)
+db.createCollection("student");
+
+// ✅ 2) Insert Documents
+db.student.insert({Rollno:1, name:'Navin', subject:'DMSA', marks:78});
+db.student.insert({Rollno:2, name:'anusha', subject:'OSD',  marks:75});
+db.student.insert({Rollno:3, name:'ravi',   subject:'TOC',  marks:69});
+db.student.insert({Rollno:4, name:'veena',  subject:'TOC',  marks:70});
+
+// ✅ 3) Display Records
+db.student.find();
+db.student.find().pretty();
+
+
+// ✅ 4) Aggregation Operations
+
+// 🔹 MIN marks per subject
+db.student.aggregate([
+    { $group: { _id: "$subject", marks: { $min: "$marks" } } }
+]);
+
+// 🔹 MAX marks per subject
+db.student.aggregate([
+    { $group: { _id: "$subject", marks: { $max: "$marks" } } }
+]);
+
+// 🔹 SUM marks per subject
+db.student.aggregate([
+    { $group: { _id: "$subject", marks: { $sum: "$marks" } } }
+]);
+
+// 🔹 AVG marks per subject
+db.student.aggregate([
+    { $group: { _id: "$subject", marks: { $avg: "$marks" } } }
+]);
+
+// 🔹 FIRST marks in each subject
+db.student.aggregate([
+    { $group: { _id: "$subject", marks: { $first: "$marks" } } }
+]);
+
+// 🔹 LAST marks in each subject
+db.student.aggregate([
+    { $group: { _id: "$subject", marks: { $last: "$marks" } } }
+]);
+
+
+
+// -------------------------------------------------------
+// ✅ 2) Create Employee Collection (Indexing Example)
+// -------------------------------------------------------
+
+db.createCollection("employee");
+
+// ✅ Insert Data
+db.employee.insertMany([
+  {emp_id: 101, name: "Amit",  department: "HR",    salary: 40000},
+  {emp_id: 102, name: "Riya",  department: "IT",    salary: 70000},
+  {emp_id: 103, name: "Raj",   department: "Sales", salary: 55000},
+  {emp_id: 104, name: "Karan", department: "IT",    salary: 80000},
+  {emp_id: 105, name: "Neha",  department: "HR",    salary: 60000}
+]);
+
+// ✅ Display Records
+db.employee.find().pretty();
+
+
+// ✅ Create Index on department
+db.employee.createIndex({ department: 1 });
+
+// ✅ Check index use
+db.employee.find({ department: "IT" }).explain("executionStats");
+
+
+// ✅ Drop index
+db.employee.dropIndex({ department: 1 });
+

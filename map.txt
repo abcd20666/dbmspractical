@@ -1,0 +1,34 @@
+
+MongoDB MapReduce - Complete Code
+
+use demo
+
+db.orders.insert({cust_id:"A123",amount:500,status:'A'})
+db.orders.insert({cust_id:"A123",amount:250,status:'A'})
+db.orders.insert({cust_id:"A121",amount:200,status:'A'})
+db.orders.insert({cust_id:"B234",amount:200,status:'A'})
+db.orders.insert({cust_id:"B234",amount:234,status:'B'})
+db.orders.insert({cust_id:"A121",amount:400,status:'D'})
+db.orders.insert({cust_id:"A234",amount:400,status:'A'})
+db.orders.insert({cust_id:"A234",amount:400,status:''})
+db.orders.insert({cust_id:"A234",amount:400,status:'B'})
+
+db.orders.find().pretty()
+
+var mapFunction1 = function() {
+    emit(this.cust_id, this.amount);
+};
+
+var reduceFunction1 = function(keyCustId, valuesAmount) {
+    return Array.sum(valuesAmount);
+};
+
+db.orders.mapReduce(
+    mapFunction1,
+    reduceFunction1,
+    { out: "map_reduce_example" }
+);
+
+db.map_reduce_example.find()
+
+db.orders.distinct("cust_id")
